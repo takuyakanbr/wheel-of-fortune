@@ -14,7 +14,7 @@ export const getAvailable = prizes => {
 export const getTotalFrequency = prizes => {
   let count = 0
   prizes.forEach(prize => {
-    count += prize.freq
+    count += prize.freq || 1
   })
   return count
 }

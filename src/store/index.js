@@ -5,17 +5,18 @@ import * as actions from './actions'
 import * as mutations from './mutations'
 
 import { getAvailable } from '../data'
-import { PRESET1 } from '../data/presets'
+import { PRESET3 } from '../data/presets'
 import { deepClone } from '../util'
 
 Vue.use(Vuex)
 
-const data = deepClone(PRESET1)
+const data = deepClone(PRESET3)
 
 const state = {
   totalSpins: 0,
   spins: 0,
-  showSettings: false,
+  lastWinner: -1,
+  showOptions: false,
   data,
   available: getAvailable(data.prizes),
   record: []

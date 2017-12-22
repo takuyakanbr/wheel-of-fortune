@@ -1,43 +1,67 @@
 <template>
   <div id="app">
-    <SettingsPanel v-if="showSettings" />
+    <OptionsPanel v-if="showOptions" />
     <WheelPanel v-else />
   </div>
 </template>
 
 <script>
-  import SettingsPanel from './components/SettingsPanel'
+  import OptionsPanel from './components/OptionsPanel'
   import WheelPanel from './components/WheelPanel'
 
   export default {
-    name: 'app',
+    name: 'App',
     components: {
-      SettingsPanel,
+      OptionsPanel,
       WheelPanel
     },
     computed: {
-      showSettings() {
-        return this.$store.state.showSettings
+      showOptions() {
+        return this.$store.state.showOptions
       }
     }
   }
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css?family=Muli');
   html, body {
+    font-family: 'Muli', sans-serif;
+    font-size: 15px;
+    margin: 0;
     height: 100%;
-    margin: 0;
     height: 100vh;
+    color: #455A64;
+    background-color: #f1f4f9;
   }
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    text-align: center;
-    color: #2c3e50;
+  div {
     margin: 0;
+    padding: 0;
+  }
+  .button {
+    color: #f1f4f9;
+    background-color: #919499;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-block;
+    border-radius: 2px;
+    padding: 3px 9px;
+    min-width: 40px;
+    -webkit-transition: background-color .2s, color .2s;
+    transition: background-color .2s, color .2s;
+  }
+  .button:hover, .button:focus {
+    color: #fafcff;
+    background-color: #a1a4a9;
+  }
+  .content-panel {
     min-height: 100%;
     height: 100vh;
   }
-  .content-panel {
+
+  #app {
+    text-align: center;
+    margin: 0;
     min-height: 100%;
     height: 100vh;
   }
