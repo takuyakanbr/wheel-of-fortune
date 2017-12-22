@@ -1,4 +1,8 @@
 
+export const addPrize = (state, prize) => {
+  state.data.prizes.push(prize)
+}
+
 // Add the prize at the given index to the records.
 export const addResult = (state, index) => {
   state.lastResult = index
@@ -14,6 +18,10 @@ export const removePreviousResult = state => {
   if (state.lastResult !== -1 && state.data.removeWinning) {
     state.available.splice(state.lastResult, 1)
   }
+}
+
+export const removePrize = (state, index) => {
+  state.data.prizes.splice(index, 1)
 }
 
 export const showOptions = state => {

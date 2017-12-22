@@ -1,6 +1,10 @@
 <template>
   <div class="main-panel wheel-panel">
 
+    <div class="show-options-container">
+      <a href="#" class="button" @click.prevent="displayOptions">Options</a>
+    </div>
+
     <div class="wheel-panel-content">
 
       <div class="wheel-header-area">
@@ -9,7 +13,7 @@
         </div>
       </div>
 
-      <Wheel ref="wheel" @resize="updateHeaderWidth" @spinCompleted="spinCompleted" />
+      <Wheel ref="wheel" @resize="updateHeaderWidth" @result="spinCompleted" />
 
       <div class="wheel-footer-area">
         <div class="wheel-footer">
@@ -18,9 +22,6 @@
         </div>
       </div>
 
-      <div class="show-options-container">
-        <a href="#" class="button" @click.prevent="displayOptions">Options</a>
-      </div>
     </div>
 
     <img class="background-image" :src="background ? background : null" />
@@ -48,22 +49,27 @@
     computed: mapState({
       spins: state => state.spins,
       name: state => state.data.name || 'Wheel of Fortune',
-      winningText: state => state.data.winningText || 'Result: %s',
+      winningText: state => state.data.winningText || 'Result: <b>%s</b>',
       background: state => state.data.background || '',
       prizes: state => state.available
     }),
     methods: {
+      // Called by the Options button. Shows the options panel.
       displayOptions() {
         if (!this.spinning) {
           this.$store.commit('showOptions')
         }
       },
+
+      // Called when the Wheel has stopped spinning.
       spinCompleted(index) {
         const prize = this.prizes[index]
         this.spinning = false
         this.spinText = 'Spin again!'
         this.resultText = this.winningText.replace('%s', prize.name)
       },
+
+      // Called by the Spin button. Requests the Wheel to start spinning.
       startSpin() {
         if (!this.spinning && this.prizes.length > 0) {
           this.spinning = true
@@ -72,6 +78,8 @@
           this.$refs.wheel.startSpin()
         }
       },
+
+      // Called when the Wheel has resized. Updates the width of the header bar.
       updateHeaderWidth(width) {
         this.headerWidth = width + 24
       }
@@ -93,8 +101,8 @@
   }
   .wheel-header-area {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
     flex: 0 0 auto;
     font-size: 20px;
     font-weight: bold;
@@ -111,8 +119,8 @@
   }
   .wheel-footer-area {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
     flex: 0 0 auto;
   }
   .wheel-footer {
@@ -124,11 +132,6 @@
   .wheel-result {
     margin-bottom: 6px;
   }
-  .show-options-container {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-  }
   .background-image {
     position: absolute;
     top: 0;
@@ -139,5 +142,11 @@
     height: 100%;
     object-fit: cover;
     opacity: 0.4;
+  }
+  .show-options-container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
   }
 </style>

@@ -5,12 +5,9 @@
 </template>
 
 <script>
-  import { DEFAULT_FREQUENCY, getTotalFrequency } from '../data'
+  import { DEFAULT_FREQUENCY, DEFAULT_TEXT_COLOR, getDefaultBgColor, getTotalFrequency } from '../data'
   import { getRandomInt } from '../util'
-
-  const COLORS = ['#ef9a9a', '#FFF59D', '#80CBC4', '#F48FB1', '#FFCC80', '#81D4FA', '#B39DDB', '#C5E1A5']
-  const NUM_COLORS = COLORS.length
-
+  
   // Calculate the resulting prize index given the final angle and list of prizes.
   function calculateResult(angle, prizes) {
     const totalFreqs = getTotalFrequency(prizes)
@@ -56,8 +53,8 @@
 
     const totalFreqs = getTotalFrequency(prizes)
     let cumulative = 0
-    let colorId = 0
-    prizes.forEach(prize => {
+    for (let i = 0; i < prizes.length; ++i) {
+      const prize = prizes[i]
       const freq = prize.freq || DEFAULT_FREQUENCY
       cumulative += freq
 
@@ -71,7 +68,7 @@
       ctx.beginPath()
       ctx.moveTo(cx, cy)
       ctx.arc(cx, cy, r, arcAngle1, arcAngle2, false)
-      ctx.fillStyle = prize.bg || COLORS[colorId++ % NUM_COLORS]
+      ctx.fillStyle = prize.bg || getDefaultBgColor(i)
       ctx.fill()
       ctx.fillStyle = g
       ctx.fill()
@@ -84,9 +81,9 @@
       const fontSize = Math.max(10, 0.4 * r * angleMod * lengthMod * fontMod)
 
       // draw text
-      ctx.fillStyle = prize.text || '#222'
+      ctx.fillStyle = prize.text || DEFAULT_TEXT_COLOR
       if (win) {
-        ctx.shadowColor = prize.text || '#222'
+        ctx.shadowColor = prize.text || DEFAULT_TEXT_COLOR
         ctx.shadowBlur = r / 15
       }
       ctx.font = 'bold ' + fontSize + 'px \'Muli\', sans-serif'
@@ -96,7 +93,7 @@
       ctx.rotate(textAngle)
       ctx.fillText(prize.name, r * 0.91, 0)
       ctx.restore()
-    })
+    }
 
     // outer ring
     ctx.save()
@@ -170,13 +167,15 @@
           })
         }
       },
+
       // Determine the winner and notify parent.
       spinCompleted() {
         const winner = calculateResult(this.angle, this.prizes)
         this.$store.commit('addResult', winner)
-        this.$emit('spinCompleted', winner)
+        this.$emit('result', winner)
       },
-      // Start spinning. Triggered by parent (WheelPanel).
+
+      // Start spinning. Called by parent (WheelPanel).
       startSpin() {
         this.$store.commit('removePreviousResult')
 
