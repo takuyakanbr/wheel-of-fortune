@@ -1,16 +1,30 @@
 <template>
-  <div class="content-panel wheel-panel">
-    <div class="wheel-header">
-      <div class="wheel-header-text" :style="{ width: headerWidth + 'px' }">{{ name }}</div>
+  <div class="main-panel wheel-panel">
+
+    <div class="wheel-panel-content">
+
+      <div class="wheel-header-area">
+        <div class="wheel-header" :style="{ width: headerWidth + 'px' }">
+          <div class="wheel-header-title">{{ name }}</div>
+        </div>
+      </div>
+
+      <Wheel ref="wheel" @resize="updateHeaderWidth" @spinCompleted="spinCompleted" />
+
+      <div class="wheel-footer-area">
+        <div class="wheel-footer">
+          <div class="wheel-result" v-html="resultText"></div>
+          <a href="#" class="button" @click.prevent="startSpin">{{ spinText }}</a>
+        </div>
+      </div>
+
+      <div class="show-options-container">
+        <a href="#" class="button" @click.prevent="displayOptions">Options</a>
+      </div>
     </div>
-    <Wheel ref="wheel" @resize="updateHeaderWidth" @spinCompleted="spinCompleted" />
-    <div class="wheel-footer">
-      <div class="wheel-result" v-html="resultText"></div>
-      <a href="#" class="button" @click.prevent="startSpin">{{ spinText }}</a>
-    </div>
-    <div class="options-container">
-      <a href="#" class="button" @click.prevent="displayOptions">Options</a>
-    </div>
+
+    <img class="background-image" :src="background ? background : null" />
+
   </div>
 </template>
 
@@ -36,7 +50,7 @@
       name: state => state.data.name || 'Wheel of Fortune',
       winningText: state => state.data.winningText || 'Result: %s',
       background: state => state.data.background || '',
-      removeWinning: state => state.data.removeWinning || false
+      prizes: state => state.available
     }),
     methods: {
       displayOptions() {
@@ -44,13 +58,14 @@
           this.$store.commit('showOptions')
         }
       },
-      spinCompleted() {
+      spinCompleted(index) {
+        const prize = this.prizes[index]
         this.spinning = false
         this.spinText = 'Spin again!'
-        this.resultText = 'Spin completed.'
+        this.resultText = this.winningText.replace('%s', prize.name)
       },
       startSpin() {
-        if (!this.spinning) {
+        if (!this.spinning && this.prizes.length > 0) {
           this.spinning = true
           this.spinText = 'Spinning...'
           this.resultText = '&#8203;'
@@ -58,44 +73,71 @@
         }
       },
       updateHeaderWidth(width) {
-        this.headerWidth = width
+        this.headerWidth = width + 24
       }
     }
   }
 </script>
 
 <style>
-  .wheel-panel {
+  .wheel-panel-content {
+    position: relative;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: stretch;
+    min-height: 100%;
+    height: 100vh;
+    z-index: 2;
   }
-  .wheel-header {
+  .wheel-header-area {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 0 0 auto;
-    padding: 12px 0;
     font-size: 20px;
     font-weight: bold;
     text-align: left;
   }
-  .wheel-header-text {
+  .wheel-header {
     min-width: 300px;
   }
-  .wheel-footer {
+  .wheel-header-title {
+    display: inline-block;
+    padding: 12px;
+    border-radius: 3px;
+    background-color: rgba(241, 244, 249, 0.4);
+  }
+  .wheel-footer-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     flex: 0 0 auto;
-    padding: 12px 0;
+  }
+  .wheel-footer {
+    padding: 12px;
     font-size: 18px;
+    border-radius: 3px;
+    background-color: rgba(241, 244, 249, 0.4);
   }
   .wheel-result {
     margin-bottom: 6px;
   }
-  .options-container {
+  .show-options-container {
     position: fixed;
     top: 10px;
     right: 10px;
+  }
+  .background-image {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
   }
 </style>

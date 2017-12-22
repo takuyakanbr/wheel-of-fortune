@@ -3,7 +3,7 @@
 // The wheel used in the game show 'Wheel of Fortune'.
 export const PRESET1 = {
   name: 'Wheel of Fortune',
-  winningText: 'Result: %s',
+  winningText: 'Result: <b>%s</b>',
   background: '',
   removeWinning: false,
   prizes: [
@@ -39,8 +39,8 @@ export const PRESET1 = {
 // Wheel of Misfortune: SMRT disruption edition.
 export const PRESET2 = {
   name: 'Wheel of Misfortune',
-  winningText: 'Congratulations! You win: %s!',
-  background: '',
+  winningText: 'Congratulations! You win: <b>%s</b>!',
+  background: '/static/smrt.jpg',
   removeWinning: false,
   prizes: [
     { name: 'No Service', freq: 4, bg: '#FFCC80', text: '#222', hide: false, fontMod: 1 },
@@ -64,10 +64,10 @@ export const PRESET2 = {
 // Wheel of Inquiry: select a person to answer your question.
 export const PRESET3 = {
   name: 'Wheel of Inquiry',
-  winningText: 'Your turn to answer the question, %s!',
+  winningText: 'Your turn to answer the question, <b>%s</b>!',
   background: '',
   removeWinning: true,
-  prizes: [
+  prizes: [ // use defaults - freq: 4, bg: auto, text: #222, hide: false, fontMod: 1
     { name: 'James' },
     { name: 'John' },
     { name: 'Robert' },

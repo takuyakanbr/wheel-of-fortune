@@ -1,21 +1,44 @@
 <template>
-  <div class="wheel-area" ref="container">
+  <div class="wheel-area">
     <canvas class="wheel" ref="canvas"></canvas>
   </div>
 </template>
 
 <script>
-  import { getTotalFrequency } from '../data'
+  import { DEFAULT_FREQUENCY, getTotalFrequency } from '../data'
+  import { getRandomInt } from '../util'
 
   const COLORS = ['#ef9a9a', '#FFF59D', '#80CBC4', '#F48FB1', '#FFCC80', '#81D4FA', '#B39DDB', '#C5E1A5']
   const NUM_COLORS = COLORS.length
 
+  // Calculate the resulting prize index given the final angle and list of prizes.
+  function calculateResult(angle, prizes) {
+    const totalFreqs = getTotalFrequency(prizes)
+    let cumulative = 0
+    let winner = -1
+
+    for (let i = 0; i < prizes.length; ++i) {
+      const freq = prizes[i].freq || DEFAULT_FREQUENCY
+      cumulative += freq
+
+      const arcAngle1 = angle + 2 * Math.PI * (cumulative - freq) / totalFreqs
+      const arcAngle2 = angle + 2 * Math.PI * cumulative / totalFreqs
+      if (isAngleBetween(3 / 2 * Math.PI, arcAngle1, arcAngle2)) {
+        winner = i
+      }
+    }
+
+    return winner
+  }
+
   // Returns true if the given angle is between the specified bounds.
   function isAngleBetween(angle, lower, upper) {
+    lower %= 2 * Math.PI
+    upper %= 2 * Math.PI
     if (lower <= upper) {
-      return (lower % (2 * Math.PI) < angle) && (upper % (2 * Math.PI) >= angle)
+      return (lower < angle) && (upper >= angle)
     } else {
-      return (upper % (2 * Math.PI) >= angle)
+      return (lower < angle) || (upper >= angle)
     }
   }
 
@@ -35,7 +58,7 @@
     let cumulative = 0
     let colorId = 0
     prizes.forEach(prize => {
-      const freq = prize.freq || 1
+      const freq = prize.freq || DEFAULT_FREQUENCY
       cumulative += freq
 
       // calculate arc and text angles
@@ -63,8 +86,8 @@
       // draw text
       ctx.fillStyle = prize.text || '#222'
       if (win) {
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.75)'
-        ctx.shadowBlur = r / 20
+        ctx.shadowColor = prize.text || '#222'
+        ctx.shadowBlur = r / 15
       }
       ctx.font = 'bold ' + fontSize + 'px \'Muli\', sans-serif'
       ctx.textAlign = 'right'
@@ -125,6 +148,9 @@
     computed: {
       prizes() {
         return this.$store.state.available
+      },
+      removeWinning() {
+        return this.$store.state.data.removeWinning || false
       }
     },
     methods: {
@@ -146,10 +172,17 @@
       },
       // Determine the winner and notify parent.
       spinCompleted() {
-        this.$emit('spinCompleted')
+        const winner = calculateResult(this.angle, this.prizes)
+        this.$store.commit('addResult', winner)
+        this.$emit('spinCompleted', winner)
       },
       // Start spinning. Triggered by parent (WheelPanel).
       startSpin() {
+        this.$store.commit('removePreviousResult')
+
+        const duration = getRandomInt(4900, 5200)
+        const speed = 0.2 + getRandomInt(0, 100) * 0.001
+
         const canvas = this.$refs.canvas
         const prizes = this.prizes
         const start = +new Date()
@@ -157,9 +190,9 @@
 
         function frame() {
           const now = +new Date()
-          let t = (now - start) / 5000
+          let t = (now - start) / duration
           if (t > 1) t = 1
-          self.angle += 0.2 * (1 - t)
+          self.angle += speed * (1 - t)
           if (t < 1) setTimeout(frame, 10)
           else self.spinCompleted()
 

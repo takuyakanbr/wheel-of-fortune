@@ -27,7 +27,7 @@
   @import url('https://fonts.googleapis.com/css?family=Muli');
   html, body {
     font-family: 'Muli', sans-serif;
-    font-size: 15px;
+    font-size: 16px;
     margin: 0;
     height: 100%;
     height: 100vh;
@@ -54,7 +54,8 @@
     color: #fafcff;
     background-color: #a1a4a9;
   }
-  .content-panel {
+  .main-panel {
+    position: relative;
     min-height: 100%;
     height: 100vh;
   }

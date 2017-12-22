@@ -15,7 +15,7 @@ const data = deepClone(PRESET3)
 const state = {
   totalSpins: 0,
   spins: 0,
-  lastWinner: -1,
+  lastResult: -1,
   showOptions: false,
   data,
   available: getAvailable(data.prizes),

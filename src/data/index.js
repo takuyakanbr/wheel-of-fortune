@@ -1,4 +1,6 @@
 
+export const DEFAULT_FREQUENCY = 4
+
 // Returns a list containing the prizes that can be won.
 export const getAvailable = prizes => {
   const list = []
@@ -14,7 +16,7 @@ export const getAvailable = prizes => {
 export const getTotalFrequency = prizes => {
   let count = 0
   prizes.forEach(prize => {
-    count += prize.freq || 1
+    count += prize.freq || DEFAULT_FREQUENCY
   })
   return count
 }
