@@ -3,7 +3,7 @@ const COLORS = ['#ef9a9a', '#FFF59D', '#80CBC4', '#F48FB1', '#FFCC80', '#81D4FA'
 const NUM_COLORS = COLORS.length
 
 export const DEFAULT_FREQUENCY = 4
-export const DEFAULT_TEXT_COLOR = '#222'
+export const DEFAULT_TEXT_COLOR = '#333'
 
 export const createNewPrize = () => ({ name: '', freq: 4, bg: '', text: '', hide: false, fontMod: 1 })
 

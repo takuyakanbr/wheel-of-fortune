@@ -4,7 +4,7 @@
       <a href="#" class="button" @click.prevent="displayWheel">Back</a>
     </div>
 
-    <div class="options-panel-content" @click="setActiveIndex(-1)">
+    <div class="options-panel-content" @click="setEditingIndex(-1)">
       <div class="options-header">Options</div>
       <table class="options-table">
         <tr>
@@ -23,47 +23,15 @@
           <td colspan="2" class="options-checkbox-cell"><input type="checkbox" id="cb-remove-winning" v-model="data.removeWinning" />
           <label for="cb-remove-winning">Remove winning items</label></td>
         </tr>
+
         <tr>
           <td colspan="2">
-
             <div class="options-prizes-header">List of Prizes</div>
-            <table class="options-prizes-list">
-              <thead>
-                <tr>
-                  <td width="40">#</td>
-                  <td width="250">Name</td>
-                  <td width="40">Freq</td>
-                  <td width="40">Hide</td>
-                  <td></td>
-                </tr>
-              </thead>
-              <tr v-for="(prize, index) in data.prizes" class="options-prizes-item" @click.stop="setActiveIndex(index)">
-
-                <template v-if="activeIndex === index">
-                  <td colspan="5" class="options-prize-editor">
-                    <PrizeData :index="index" :prize="prize" />
-                  </td>
-                </template>
-
-                <template v-else>
-                  <td>{{ index + 1 }}</td>
-                  <td :style="{
-                    backgroundColor: prize.bg || getDefaultBgColor(index),
-                    color: prize.text || DEFAULT_TEXT_COLOR
-                    }">
-                    {{ prize.name }}
-                  </td>
-                  <td>{{ prize.freq || DEFAULT_FREQUENCY }}</td>
-                  <td><input type="checkbox" v-model="prize.hide" /></td>
-                  <td><a href="#" class="button small" @click.prevent.stop="removePrize(index)">X</a></td>
-                </template>
-
-              </tr>
-            </table>
+            <PrizeListEditor :prizes="data.prizes" :editing="editing" @editing="setEditingIndex"/>
             <a href="#" class="button small" @click.prevent.stop="addPrize">Add Prize</a>
-
           </td>
         </tr>
+
       </table>
 
       <div class="options-button-area">
@@ -78,19 +46,17 @@
 </template>
 
 <script>
-  import PrizeData from './PrizeData'
-  import { DEFAULT_FREQUENCY, DEFAULT_TEXT_COLOR, createNewPrize, getDefaultBgColor } from '../data'
+  import PrizeListEditor from './PrizeListEditor'
+  import { createNewPrize } from '../data'
 
   export default {
     name: 'OptionsPanel',
     components: {
-      PrizeData
+      PrizeListEditor
     },
     data() {
       return {
-        DEFAULT_FREQUENCY,
-        DEFAULT_TEXT_COLOR,
-        activeIndex: -1
+        editing: -1
       }
     },
     computed: {
@@ -101,24 +67,20 @@
     methods: {
       addPrize() {
         this.$store.commit('addPrize', createNewPrize())
-        this.activeIndex = this.data.prizes.length - 1
+        this.setEditingIndex(this.data.prizes.length - 1)
       },
-      getDefaultBgColor,
       displayWheel() {
         this.$store.commit('hideOptions')
       },
       loadPreset() {
       },
-      removePrize(index) {
-        this.$store.commit('removePrize', index)
-      },
       save() {
       },
       savePreset() {
       },
-      setActiveIndex(index) {
-        if (this.activeIndex !== index) {
-          this.activeIndex = index
+      setEditingIndex(index) {
+        if (this.editing !== index) {
+          this.editing = index
         }
       }
     }
@@ -162,24 +124,6 @@
     font-size: 18px;
     font-weight: bold;
     margin-top: 12px;
-  }
-  .options-prizes-list {
-    margin: 10px 0;
-  }
-  .options-prizes-list thead {
-    font-weight: bold;
-  }
-  .options-prizes-item {
-    cursor: pointer;
-  }
-  .options-prizes-item:nth-child(2n+1) {
-    background-color: #eaecef;
-  }
-  .options-prizes-item:hover {
-    background-color: #e1e4e9;
-  }
-  .options-prize-editor {
-    cursor: default;
   }
 
   .options-button-area {

@@ -2,7 +2,7 @@
   <table class="prize-editor">
     <tr>
       <td><label for="tb-prize-name">Name</label></td>
-      <td class="prize-input-cell"><input type="text" id="tb-prize-name" v-model="prize.name" /></td>
+      <td class="prize-input-cell"><input type="text" id="tb-prize-name" v-model="prize.name" v-focus /></td>
     </tr>
     <tr>
       <td><label for="tb-prize-freq">Relative Frequency</label></td>
@@ -25,7 +25,7 @@
 
 <script>
   export default {
-    name: 'PrizeData',
+    name: 'PrizeEditor',
     props: {
       index: {
         type: Number,
