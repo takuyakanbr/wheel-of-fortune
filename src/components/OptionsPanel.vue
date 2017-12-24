@@ -1,7 +1,8 @@
 <template>
   <div class="main-panel options-panel">
+
     <div class="hide-options-container">
-      <a href="#" class="button" @click.prevent="displayWheel">Back</a>
+      <a href="#" class="button" @click.prevent="goBack">Back</a>
     </div>
 
     <div class="options-panel-content" @click="setEditingIndex(-1)">
@@ -35,9 +36,9 @@
       </table>
 
       <div class="options-button-area">
-        <a href="#" class="button" @click.prevent="loadPreset">Load Preset</a><br/>
-        <a href="#" class="button" @click.prevent="savePreset">Save as Preset</a><br/>
-        <a href="#" class="button" @click.prevent="save">Save and Go Back</a>
+        <a href="#" class="button" @click.prevent="showLoadPresetPanel">Load Preset</a><br/>
+        <a href="#" class="button" @click.prevent="showSavePresetPanel">Save as Preset</a><br/>
+        <a href="#" class="button" @click.prevent="saveAndReset">Save and Reset Wheel</a>
       </div>
 
     </div>
@@ -69,19 +70,21 @@
         this.$store.commit('addPrize', createNewPrize())
         this.setEditingIndex(this.data.prizes.length - 1)
       },
-      displayWheel() {
+      goBack() {
         this.$store.commit('hideOptions')
       },
-      loadPreset() {
-      },
-      save() {
-      },
-      savePreset() {
+      saveAndReset() {
+        this.$store.commit('saveAndReset')
+        this.$store.commit('hideOptions')
       },
       setEditingIndex(index) {
         if (this.editing !== index) {
           this.editing = index
         }
+      },
+      showLoadPresetPanel() {
+      },
+      showSavePresetPanel() {
       }
     }
   }

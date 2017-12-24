@@ -171,13 +171,13 @@
       // Determine the winner and notify parent.
       spinCompleted() {
         const winner = calculateResult(this.angle, this.prizes)
-        this.$store.commit('addResult', winner)
+        this.$store.commit('addSpinResult', winner)
         this.$emit('result', winner)
       },
 
       // Start spinning. Called by parent (WheelPanel).
       startSpin() {
-        this.$store.commit('removePreviousResult')
+        this.$store.commit('updateAvailable')
 
         const duration = getRandomInt(4900, 5200)
         const speed = 0.2 + getRandomInt(0, 100) * 0.001
