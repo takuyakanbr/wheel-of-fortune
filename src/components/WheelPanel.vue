@@ -2,7 +2,7 @@
   <div class="main-panel wheel-panel">
 
     <div class="show-options-container">
-      <a href="#" class="button" @click.prevent="displayOptions">Options</a>
+      <a href="#" class="button" @click.prevent.stop="displayOptions">Options</a>
     </div>
 
     <div class="wheel-panel-content">

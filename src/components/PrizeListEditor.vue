@@ -9,6 +9,7 @@
         <td></td>
       </tr>
     </thead>
+
     <template v-for="(prize, index) in prizes">
       <template v-if="editing === index">
         <tr class="prizelist-item prizelist-item-active" @click.stop="">
@@ -32,6 +33,7 @@
         </tr>
       </template>
     </template>
+
   </table>
 </template>
 
@@ -79,7 +81,7 @@
   .prizelist > thead {
     font-weight: bold;
   }
-  .prizelist-item:nth-child(2n+1) {
+  .prizelist-item:nth-child(2n) {
     background-color: #eaecef;
   }
   .prizelist-item-active > td {

@@ -23,7 +23,7 @@ const state = {
   lastResult: -1,
   showOptions: false,
   data,
-  available: getAvailable(data.prizes),
+  available: deepClone(getAvailable(data.prizes)),
   record: [],
   presets: loadPresets()
 }

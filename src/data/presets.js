@@ -86,3 +86,5 @@ export const PRESET3 = {
     { name: 'Susan' }
   ]
 }
+
+export const DEFAULT_PRESETS = [PRESET1, PRESET2, PRESET3]

@@ -62,7 +62,7 @@
       const arcAngle1 = angle + 2 * Math.PI * (cumulative - freq) / totalFreqs
       const arcAngle2 = angle + 2 * Math.PI * cumulative / totalFreqs
       const textAngle = angle + 2 * Math.PI * (cumulative - freq / 2) / totalFreqs
-      const win = isAngleBetween(3 / 2 * Math.PI, arcAngle1, arcAngle2)
+      const highlight = isAngleBetween(3 / 2 * Math.PI, arcAngle1, arcAngle2)
 
       // draw arc
       ctx.beginPath()
@@ -82,11 +82,11 @@
 
       // draw text
       ctx.fillStyle = prize.text || DEFAULT_TEXT_COLOR
-      if (win) {
+      if (highlight) {
         ctx.shadowColor = prize.text || DEFAULT_TEXT_COLOR
         ctx.shadowBlur = r / 15
       }
-      ctx.font = 'bold ' + fontSize + 'px \'Muli\', sans-serif'
+      ctx.font = fontSize + 'px \'Muli\', sans-serif'
       ctx.textAlign = 'right'
       ctx.textBaseline = 'middle'
       ctx.translate(cx, cy)
@@ -179,8 +179,8 @@
       startSpin() {
         this.$store.commit('updateAvailable')
 
-        const duration = getRandomInt(4900, 5200)
-        const speed = 0.2 + getRandomInt(0, 100) * 0.001
+        const duration = getRandomInt(4700, 5300)
+        const speed = 0.2 + getRandomInt(0, 150) * 0.001
 
         const canvas = this.$refs.canvas
         const prizes = this.prizes
