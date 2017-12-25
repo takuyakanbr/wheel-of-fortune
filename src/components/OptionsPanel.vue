@@ -6,8 +6,10 @@
     </div>
 
     <div class="options-panel-content">
-      <LoadPresetPanel v-if="panel === 'load'" @close="hidePanel" />
-      <SavePresetPanel v-if="panel === 'save'" @close="hidePanel" />
+      <transition name="fade">
+        <LoadPresetPanel v-if="panel === 'load'" @close="hidePanel" />
+        <SavePresetPanel v-if="panel === 'save'" @close="hidePanel" />
+      </transition>
 
       <div class="options-header">Options</div>
       <table class="options-table">

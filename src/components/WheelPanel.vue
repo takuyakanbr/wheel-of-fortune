@@ -9,7 +9,9 @@
       <a href="#" class="button" @click.prevent.stop="displayRecords">Records</a>
     </div>
 
-    <RecordsPanel v-if="showRecords" @close="hideRecords"/>
+    <transition name="fade">
+      <RecordsPanel v-if="showRecords" @close="hideRecords" />
+    </transition>
 
     <div class="wheel-panel-content">
 

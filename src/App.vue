@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <OptionsPanel v-if="showOptions" />
-    <WheelPanel v-else />
+    <transition name="fade-in" mode="out-in" appear>
+      <OptionsPanel v-if="showOptions" />
+      <WheelPanel v-else />
+    </transition>
   </div>
 </template>
 
@@ -47,7 +49,6 @@
     border: none;
     border-bottom: 1px solid #B0BEC5;
     transform-origin: left;
-    -webkit-transition: border-color .25s;
     transition: border-color .25s;
   }
   input[type=text]:focus, input[type=number]:focus {
@@ -64,7 +65,6 @@
     border-radius: 2px;
     padding: 3px 9px;
     min-width: 40px;
-    -webkit-transition: background-color .2s, color .2s;
     transition: background-color .2s, color .2s;
   }
   .button:hover, .button:focus {
@@ -80,6 +80,15 @@
     position: relative;
     min-height: 100%;
     height: 100vh;
+  }
+  .fade-enter-active, .fade-leave-active, .fade-in-enter-active {
+    transition: opacity .15s;
+  }
+  .fade-in-enter-active {
+    transition: opacity .25s;
+  }
+  .fade-enter, .fade-leave-to, .fade-in-enter {
+    opacity: 0;
   }
 
   #app {
