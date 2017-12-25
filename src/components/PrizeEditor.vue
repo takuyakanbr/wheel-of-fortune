@@ -5,7 +5,7 @@
       <td class="prize-input-cell"><input type="text" id="tb-prize-name" v-model="prize.name" v-focus /></td>
     </tr>
     <tr>
-      <td><label for="tb-prize-freq">Relative Frequency</label></td>
+      <td><label for="tb-prize-freq">Relative Chance</label></td>
       <td class="prize-input-cell"><input type="number" id="tb-prize-freq" v-model.number="prize.freq" placeholder="4" /></td>
     </tr>
     <tr>
@@ -40,5 +40,7 @@
 </script>
 
 <style>
-
+  .prize-input-cell > input {
+    width: 160px;
+  }
 </style>

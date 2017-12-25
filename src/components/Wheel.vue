@@ -126,14 +126,7 @@
     ctx.fill()
     ctx.restore()
   }
-
-  // Render the contents of the offscreen canvas onto the given canvas.
-  function render(offscreen, canvas) {
-    const ctx = canvas.getContext('2d')
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.drawImage(offscreen, 0, 0)
-  }
-
+  
   export default {
     name: 'Wheel',
     data() {
@@ -153,17 +146,16 @@
     methods: {
       // Resize and repaint the wheel if the size of the canvas changes.
       resize() {
-        const offscreen = this.offscreen
         const canvas = this.$refs.canvas
-        if (canvas.height !== canvas.offsetHeight || canvas.width !== canvas.offsetWidth) {
-          canvas.width = canvas.offsetWidth
-          canvas.height = canvas.offsetHeight
-          offscreen.width = canvas.offsetWidth
-          offscreen.height = canvas.offsetHeight
+        const pixelRatio = window.devicePixelRatio || 1
+        const desiredWidth = canvas.offsetWidth * pixelRatio
+        const desiredHeight = canvas.offsetHeight * pixelRatio
+        if (canvas.width !== desiredWidth || canvas.height !== desiredHeight) {
+          canvas.width = desiredWidth
+          canvas.height = desiredHeight
           this.$store.commit('updateWheelSize', Math.min(canvas.width, canvas.height))
           window.requestAnimationFrame(() => {
-            redraw(offscreen, this.angle, this.prizes)
-            render(offscreen, canvas)
+            redraw(canvas, this.angle, this.prizes)
           })
         }
       },
@@ -177,27 +169,28 @@
 
       // Start spinning. Called by parent (WheelPanel).
       startSpin() {
-        this.$store.commit('updateAvailable')
-
-        const duration = getRandomInt(4600, 5300)
-        const speed = 0.2 + getRandomInt(0, 150) * 0.001
-
         const canvas = this.$refs.canvas
         const prizes = this.prizes
-        const start = +new Date()
         const self = this
+        let animFrame = null
+
+        const totalTicks = getRandomInt(450, 530)
+        const speed = 0.12 + getRandomInt(0, 80) * 0.001
+        let ticks = 0
+        const start = +new Date()
 
         function frame() {
           const now = +new Date()
-          let t = (now - start) / duration
-          if (t > 1) t = 1
-          self.angle += speed * (1 - t)
-          if (t < 1) setTimeout(frame, 10)
+          const targetTicks = Math.min(totalTicks, (now - start) / 10)
+          for (; ticks <= targetTicks; ++ticks) {
+            self.angle += speed * (totalTicks - ticks) / totalTicks
+          }
+          if (ticks < totalTicks) setTimeout(frame, 10)
           else self.spinCompleted()
 
-          window.requestAnimationFrame(() => {
-            redraw(self.offscreen, self.angle, prizes)
-            render(self.offscreen, canvas)
+          window.cancelAnimationFrame(animFrame)
+          animFrame = window.requestAnimationFrame(() => {
+            redraw(canvas, self.angle, prizes)
           })
         }
 

@@ -1,15 +1,15 @@
 <template>
   <div class="main-panel options-panel" @click="setEditingIndex(-1)">
 
-    <div class="hide-options-container">
-      <a href="#" class="button" @click.prevent.stop="goBack">Back</a>
-    </div>
+    <transition name="fade">
+      <LoadPresetPanel v-if="panel === 'load'" @close="hidePanel" />
+      <SavePresetPanel v-if="panel === 'save'" @close="hidePanel" />
+    </transition>
 
     <div class="options-panel-content">
-      <transition name="fade">
-        <LoadPresetPanel v-if="panel === 'load'" @close="hidePanel" />
-        <SavePresetPanel v-if="panel === 'save'" @close="hidePanel" />
-      </transition>
+      <div class="hide-options-container">
+        <a href="#" class="button" @click.prevent.stop="goBack">Back</a>
+      </div>
 
       <div class="options-header">Options</div>
       <table class="options-table">
@@ -122,7 +122,7 @@
   .options-header {
     font-size: 20px;
     font-weight: bold;
-    padding: 15px 0 20px;
+    padding: 15px 5px 20px;
   }
 
   .options-table td {
@@ -146,7 +146,7 @@
   }
 
   .options-button-area {
-    margin: 20px 0 25px;
+    margin: 20px 5px 25px;
     float: right;
     clear: both;
   }
@@ -155,7 +155,14 @@
   }
   .hide-options-container {
     position: fixed;
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+  }
+  @media(max-width: 720px) {
+    .hide-options-container {
+      position: absolute;
+      top: 20px;
+    }
   }
 </style>

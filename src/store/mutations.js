@@ -62,6 +62,7 @@ export const showOptions = state => {
 export const updateAvailable = state => {
   if (state.lastResult !== -1 && state.data.removeWinning) {
     state.available.splice(state.lastResult, 1)
+    state.lastResult = -1
   }
 }
 

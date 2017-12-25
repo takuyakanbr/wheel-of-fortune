@@ -11,17 +11,17 @@ import { deepClone, getParameterByName } from '../util'
 
 Vue.use(Vuex)
 
-// Load options. If unavailable, use default preset.
 let options = loadOptions()
-if (!options) {
-  options = deepClone(PRESET1)
-}
-
 const presets = loadPresets()
 
 // Use the preset specified by the parameter, if any.
 const initial = getInitialPreset(getParameterByName('preset'), presets)
-const data = initial ? deepClone(initial) : deepClone(options)
+const data = initial ? deepClone(initial) : deepClone(PRESET1)
+
+// If there is no stored options, use the initial data as options.
+if (!options) {
+  options = deepClone(data)
+}
 
 const state = {
   totalSpins: 0,

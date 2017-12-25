@@ -40,7 +40,7 @@ export const PRESET1 = {
 export const PRESET2 = {
   name: 'Wheel of Misfortune',
   winningText: 'Congratulations! You win: <b>%s</b>!',
-  background: '/static/smrt.jpg',
+  background: 'static/smrt.jpg',
   removeWinning: false,
   prizes: [
     { name: 'No Service', freq: 4, bg: '#FFCC80', text: '#222', hide: false, fontMod: 1 },

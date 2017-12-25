@@ -62,7 +62,7 @@
       winningText: state => state.data.winningText || 'Result: <b>%s</b>',
       background: state => state.data.background || '',
       prizes: state => state.available,
-      headerWidth: state => state.size + 24
+      headerWidth: state => state.size
     }),
     methods: {
       displayRecords() {
@@ -90,7 +90,10 @@
 
       // Called by the Spin button. Requests the Wheel to start spinning.
       startSpin() {
-        if (!this.spinning && this.prizes.length > 0) {
+        if (!this.spinning) {
+          this.$store.commit('updateAvailable')
+          if (this.prizes.length === 0) return
+
           this.spinning = true
           this.spinText = 'Spinning...'
           this.resultText = '&#8203;'
@@ -121,27 +124,27 @@
     font-size: 20px;
     font-weight: bold;
     text-align: left;
+    background-color: rgba(241, 244, 249, 0.3);
   }
   .wheel-header {
+    margin: 12px;
     min-width: 300px;
   }
   .wheel-header-title {
     display: inline-block;
-    padding: 12px;
     border-radius: 3px;
-    background-color: rgba(241, 244, 249, 0.4);
   }
   .wheel-footer-area {
     display: flex;
     flex-direction: row;
     justify-content: center;
     flex: 0 0 auto;
+    background-color: rgba(241, 244, 249, 0.3);
   }
   .wheel-footer {
     padding: 12px;
     font-size: 18px;
     border-radius: 3px;
-    background-color: rgba(241, 244, 249, 0.4);
   }
   .wheel-result {
     margin-bottom: 6px;
@@ -159,14 +162,14 @@
   }
   .show-options-container {
     position: fixed;
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
     z-index: 3;
   }
   .show-records-container {
     position: fixed;
-    bottom: 10px;
-    right: 10px;
+    bottom: 12px;
+    right: 12px;
     z-index: 3;
   }
 </style>

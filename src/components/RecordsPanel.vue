@@ -70,14 +70,16 @@
   .records-panel-list > thead {
     font-weight: bold;
   }
+  .records-panel-list td {
+    padding: 3px;
+  }
   .records-panel-item:nth-child(2n) {
-    background-color: #eaecef;
+    background-color: rgba(0, 0, 0, 0.06);
   }
   .hide-records-container {
     flex: 0 0;
-    padding: 10px;
+    padding: 12px;
     text-align: right;
-    background-color: rgba(241, 244, 249, 0.8);
     z-index: 6;
   }
 </style>

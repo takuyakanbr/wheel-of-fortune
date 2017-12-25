@@ -49,7 +49,9 @@
     bottom: 0;
     left: 0;
     right: 0;
+    text-align: left;
     background-color: rgba(241, 244, 249, 0.8);
+    z-index: 10;
   }
   .modal-panel-content {
     padding: 10px 10px 0;
