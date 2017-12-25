@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <Wheel ref="wheel" @resize="updateHeaderWidth" @result="spinCompleted" />
+      <Wheel ref="wheel" @result="spinCompleted" />
 
       <div class="wheel-footer-area">
         <div class="wheel-footer">
@@ -48,7 +48,6 @@
     },
     data() {
       return {
-        headerWidth: 300,
         showRecords: false,
         spinning: false,
         spinText: 'Spin!',
@@ -60,7 +59,8 @@
       name: state => state.data.name || 'Wheel of Fortune',
       winningText: state => state.data.winningText || 'Result: <b>%s</b>',
       background: state => state.data.background || '',
-      prizes: state => state.available
+      prizes: state => state.available,
+      headerWidth: state => state.size + 24
     }),
     methods: {
       displayRecords() {
@@ -94,11 +94,6 @@
           this.resultText = '&#8203;'
           this.$refs.wheel.startSpin()
         }
-      },
-
-      // Called when the Wheel has resized. Updates the width of the header bar.
-      updateHeaderWidth(width) {
-        this.headerWidth = width + 24
       }
     }
   }

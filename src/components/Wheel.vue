@@ -160,7 +160,7 @@
           canvas.height = canvas.offsetHeight
           offscreen.width = canvas.offsetWidth
           offscreen.height = canvas.offsetHeight
-          this.$emit('resize', Math.min(canvas.width, canvas.height))
+          this.$store.commit('updateWheelSize', Math.min(canvas.width, canvas.height))
           window.requestAnimationFrame(() => {
             redraw(offscreen, this.angle, this.prizes)
             render(offscreen, canvas)
@@ -179,7 +179,7 @@
       startSpin() {
         this.$store.commit('updateAvailable')
 
-        const duration = getRandomInt(4700, 5300)
+        const duration = getRandomInt(4600, 5300)
         const speed = 0.2 + getRandomInt(0, 150) * 0.001
 
         const canvas = this.$refs.canvas

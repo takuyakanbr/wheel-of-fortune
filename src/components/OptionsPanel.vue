@@ -13,26 +13,26 @@
       <table class="options-table">
         <tr>
           <td><label for="tb-wheel-name">Name</label></td>
-          <td class="options-input-cell"><input type="text" id="tb-wheel-name" v-model="data.name" placeholder="Wheel of Fortune" /></td>
+          <td class="options-input-cell"><input type="text" id="tb-wheel-name" v-model="options.name" placeholder="Wheel of Fortune" /></td>
         </tr>
         <tr>
           <td><label for="tb-winning-text">Winning Text</label></td>
-          <td class="options-input-cell"><input type="text" id="tb-winning-text" v-model="data.winningText" placeholder="Result: <b>%s</b>" /></td>
+          <td class="options-input-cell"><input type="text" id="tb-winning-text" v-model="options.winningText" placeholder="Result: <b>%s</b>" /></td>
         </tr>
         <tr>
           <td><label for="tb-background-image">Background Image</label></td>
-          <td class="options-input-cell"><input type="text" id="tb-background-image" v-model="data.background" placeholder="none" /></td>
+          <td class="options-input-cell"><input type="text" id="tb-background-image" v-model="options.background" placeholder="none" /></td>
         </tr>
         <tr>
           <td colspan="2" class="options-checkbox-cell">
-            <input type="checkbox" id="cb-remove-winning" v-model="data.removeWinning" />
+            <input type="checkbox" id="cb-remove-winning" v-model="options.removeWinning" />
             <label for="cb-remove-winning">Remove winning items</label>
           </td>
         </tr>
         <tr>
           <td colspan="2">
             <div class="options-prizes-header">List of Prizes</div>
-            <PrizeListEditor :prizes="data.prizes" :editing="editing" @editing="setEditingIndex" />
+            <PrizeListEditor :prizes="options.prizes" :editing="editing" @editing="setEditingIndex" />
             <a href="#" class="button small" @click.prevent.stop="addPrize">Add Prize</a>
           </td>
         </tr>
@@ -69,14 +69,14 @@
       }
     },
     computed: {
-      data() {
-        return this.$store.state.data
+      options() {
+        return this.$store.state.options
       }
     },
     methods: {
       addPrize() {
         this.$store.commit('addPrize', createNewPrize())
-        this.setEditingIndex(this.data.prizes.length - 1)
+        this.setEditingIndex(this.options.prizes.length - 1)
       },
       goBack() {
         this.$store.commit('hideOptions')

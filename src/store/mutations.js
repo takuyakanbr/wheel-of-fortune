@@ -1,10 +1,10 @@
 
 import { getAvailable } from '../data'
-import { savePresets, saveWheelData } from '../data/storage'
+import { saveOptions, savePresets } from '../data/storage'
 import { deepClone } from '../util'
 
 export const addPrize = (state, prize) => {
-  state.data.prizes.push(prize)
+  state.options.prizes.push(prize)
 }
 
 // Add the prize at the given index to the records.
@@ -21,7 +21,7 @@ export const hideOptions = state => {
 
 export const loadPreset = (state, data) => {
   if (data) {
-    state.data = deepClone(data)
+    state.options = deepClone(data)
   }
 }
 
@@ -31,16 +31,17 @@ export const removePreset = (state, index) => {
 }
 
 export const removePrize = (state, index) => {
-  state.data.prizes.splice(index, 1)
+  state.options.prizes.splice(index, 1)
 }
 
 // Save current wheel data to storage, and reset the wheel.
 export const saveAndReset = state => {
   state.spins = 0
   state.lastResult = -1
-  state.available = deepClone(getAvailable(state.data.prizes))
   state.records = []
-  saveWheelData(state.data)
+  state.data = deepClone(state.options)
+  state.available = deepClone(getAvailable(state.data.prizes))
+  saveOptions(state.options)
 }
 
 export const saveNewPreset = (state, name) => {
@@ -62,4 +63,8 @@ export const updateAvailable = state => {
   if (state.lastResult !== -1 && state.data.removeWinning) {
     state.available.splice(state.lastResult, 1)
   }
+}
+
+export const updateWheelSize = (state, size) => {
+  state.size = size
 }

@@ -20,6 +20,19 @@ function setItem(storage, key, value) {
 
 const storage = isSupported('localStorage') ? window.localStorage : window.sessionStorage
 
+export const loadOptions = () => {
+  let options = storage.getItem('wofOptions')
+  if (options) {
+    try {
+      options = JSON.parse(options)
+    } catch (e) {
+      options = null
+      console.error('Error loading options: ' + e)
+    }
+  }
+  return options
+}
+
 export const loadPresets = () => {
   const presets = []
   let names = storage.getItem('wofPresets')
@@ -38,17 +51,8 @@ export const loadPresets = () => {
   return presets
 }
 
-export const loadWheelData = () => {
-  let wheelData = storage.getItem('wofWheelData')
-  if (wheelData) {
-    try {
-      wheelData = JSON.parse(wheelData)
-    } catch (e) {
-      wheelData = null
-      console.error('Error loading wheel data: ' + e)
-    }
-  }
-  return wheelData
+export const saveOptions = (options) => {
+  setItem(storage, 'wofOptions', JSON.stringify(options))
 }
 
 export const savePresets = (presets) => {
@@ -59,8 +63,4 @@ export const savePresets = (presets) => {
     setItem(storage, 'wofPresetData' + i, JSON.stringify(preset.data))
   }
   setItem(storage, 'wofPresets', JSON.stringify(names))
-}
-
-export const saveWheelData = (data) => {
-  setItem(storage, 'wofWheelData', JSON.stringify(data))
 }

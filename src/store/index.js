@@ -6,22 +6,26 @@ import * as mutations from './mutations'
 
 import { getAvailable } from '../data'
 import { PRESET3 } from '../data/presets'
-import { loadPresets, loadWheelData } from '../data/storage'
+import { loadOptions, loadPresets } from '../data/storage'
 import { deepClone } from '../util'
 
 Vue.use(Vuex)
 
-// Load wheel data. If unavailable, use default preset.
-let data = loadWheelData()
-if (!data) {
-  data = deepClone(PRESET3)
+// Load options. If unavailable, use default preset.
+let options = loadOptions()
+if (!options) {
+  options = deepClone(PRESET3)
 }
+
+const data = deepClone(options)
 
 const state = {
   totalSpins: 0,
   spins: 0,
   lastResult: -1,
   showOptions: false,
+  size: 0,
+  options,
   data,
   available: deepClone(getAvailable(data.prizes)),
   records: [],
