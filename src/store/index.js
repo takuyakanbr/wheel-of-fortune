@@ -4,20 +4,24 @@ import * as getters from './getters'
 import * as actions from './actions'
 import * as mutations from './mutations'
 
-import { getAvailable } from '../data'
-import { PRESET3 } from '../data/presets'
+import { getAvailable, getInitialPreset } from '../data'
+import { PRESET1 } from '../data/presets'
 import { loadOptions, loadPresets } from '../data/storage'
-import { deepClone } from '../util'
+import { deepClone, getParameterByName } from '../util'
 
 Vue.use(Vuex)
 
 // Load options. If unavailable, use default preset.
 let options = loadOptions()
 if (!options) {
-  options = deepClone(PRESET3)
+  options = deepClone(PRESET1)
 }
 
-const data = deepClone(options)
+const presets = loadPresets()
+
+// Use the preset specified by the parameter, if any.
+const initial = getInitialPreset(getParameterByName('preset'), presets)
+const data = initial ? deepClone(initial) : deepClone(options)
 
 const state = {
   totalSpins: 0,
@@ -29,7 +33,7 @@ const state = {
   data,
   available: deepClone(getAvailable(data.prizes)),
   records: [],
-  presets: loadPresets()
+  presets
 }
 
 const store = new Vuex.Store({
