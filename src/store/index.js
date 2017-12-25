@@ -24,7 +24,7 @@ const state = {
   showOptions: false,
   data,
   available: deepClone(getAvailable(data.prizes)),
-  record: [],
+  records: [],
   presets: loadPresets()
 }
 

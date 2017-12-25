@@ -5,6 +5,12 @@
       <a href="#" class="button" @click.prevent.stop="displayOptions">Options</a>
     </div>
 
+    <div class="show-records-container">
+      <a href="#" class="button" @click.prevent.stop="displayRecords">Records</a>
+    </div>
+
+    <RecordsPanel v-if="showRecords" @close="hideRecords"/>
+
     <div class="wheel-panel-content">
 
       <div class="wheel-header-area">
@@ -30,17 +36,20 @@
 </template>
 
 <script>
+  import RecordsPanel from './RecordsPanel'
   import Wheel from './Wheel'
   import { mapState } from 'vuex'
 
   export default {
     name: 'WheelPanel',
     components: {
+      RecordsPanel,
       Wheel
     },
     data() {
       return {
         headerWidth: 300,
+        showRecords: false,
         spinning: false,
         spinText: 'Spin!',
         resultText: 'Ready. Get set.'
@@ -54,11 +63,19 @@
       prizes: state => state.available
     }),
     methods: {
+      displayRecords() {
+        this.showRecords = true
+      },
+
       // Called by the Options button. Shows the options panel.
       displayOptions() {
         if (!this.spinning) {
           this.$store.commit('showOptions')
         }
+      },
+
+      hideRecords() {
+        this.showRecords = false
       },
 
       // Called when the Wheel has stopped spinning.
@@ -146,6 +163,12 @@
   .show-options-container {
     position: fixed;
     top: 10px;
+    right: 10px;
+    z-index: 3;
+  }
+  .show-records-container {
+    position: fixed;
+    bottom: 10px;
     right: 10px;
     z-index: 3;
   }

@@ -12,7 +12,7 @@ export const addSpinResult = (state, index) => {
   state.totalSpins++
   state.spins++
   state.lastResult = index
-  state.record.push(state.available[index].name)
+  state.records.push(state.available[index].name)
 }
 
 export const hideOptions = state => {
@@ -39,7 +39,7 @@ export const saveAndReset = state => {
   state.spins = 0
   state.lastResult = -1
   state.available = deepClone(getAvailable(state.data.prizes))
-  state.record = []
+  state.records = []
   saveWheelData(state.data)
 }
 
