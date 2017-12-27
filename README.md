@@ -1,6 +1,7 @@
 # Wheel of Fortune
 
-> Spin the wheel of fortune
+> Spin the Wheel of Fortune.
+> [View it on Github Pages.](https://takuyakanbr.github.io/wheel-of-fortune/)
 
 ## Build Setup
 
