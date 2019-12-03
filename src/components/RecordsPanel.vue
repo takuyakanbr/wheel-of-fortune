@@ -57,10 +57,9 @@ export default {
 }
 .records-panel-header {
   flex: 0 0;
-  margin: 10px 0 0 10px;
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin: 10px 0 10px 10px;
 }
 .records-panel-content {
   flex: 1 1 auto;

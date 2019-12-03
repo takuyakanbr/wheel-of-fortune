@@ -1,6 +1,13 @@
 <template>
-  <div class="wheel-area">
-    <canvas class="wheel" ref="canvas"></canvas>
+  <div class="wheels-container">
+    <div class="wheels">
+      <div class="wheel-container">
+        <canvas class="wheel-main" ref="mainCanvas" />
+      </div>
+      <div class="wheel-container">
+        <canvas class="wheel-sub" ref="subCanvas" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -39,8 +46,8 @@ function isAngleBetween(angle, lower, upper) {
   }
 }
 
-// Redraw the wheel onto the canvas, with the given offset angle and list of prizes.
-function redraw(canvas, angle, prizes) {
+// Redraw the wheel onto the given canvas, with the given offset angle and list of prizes.
+function redrawWheel(canvas, angle, prizes) {
   const r = Math.min(canvas.width, canvas.height) / 2.05;
   const cx = canvas.width / 2;
   const cy = canvas.height / 2;
@@ -94,6 +101,14 @@ function redraw(canvas, angle, prizes) {
     ctx.fillText(prize.name, r * 0.91, 0);
     ctx.restore();
   }
+}
+
+// Redraw the wheel frame onto the given canvas.
+function redrawFrame(canvas) {
+  const r = Math.min(canvas.width, canvas.height) / 2.05;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const ctx = canvas.getContext('2d');
 
   // outer ring
   ctx.save();
@@ -146,16 +161,20 @@ export default {
   methods: {
     // Resize and repaint the wheel if the size of the canvas changes.
     resize() {
-      const canvas = this.$refs.canvas;
+      const mainCanvas = this.$refs.mainCanvas;
+      const subCanvas = this.$refs.subCanvas;
       const pixelRatio = window.devicePixelRatio || 1;
-      const desiredWidth = canvas.offsetWidth * pixelRatio;
-      const desiredHeight = canvas.offsetHeight * pixelRatio;
-      if (canvas.width !== desiredWidth || canvas.height !== desiredHeight) {
-        canvas.width = desiredWidth;
-        canvas.height = desiredHeight;
-        this.$store.commit('updateWheelSize', Math.min(canvas.width, canvas.height));
+      const desiredWidth = mainCanvas.offsetWidth * pixelRatio;
+      const desiredHeight = mainCanvas.offsetHeight * pixelRatio;
+      if (mainCanvas.width !== desiredWidth || mainCanvas.height !== desiredHeight) {
+        mainCanvas.width = desiredWidth;
+        mainCanvas.height = desiredHeight;
+        subCanvas.width = desiredWidth;
+        subCanvas.height = desiredHeight;
+        this.$store.commit('updateWheelSize', Math.min(mainCanvas.width, mainCanvas.height));
         window.requestAnimationFrame(() => {
-          redraw(canvas, this.angle, this.prizes);
+          redrawWheel(mainCanvas, this.angle, this.prizes);
+          redrawFrame(subCanvas);
         });
       }
     },
@@ -169,36 +188,35 @@ export default {
 
     // Start spinning. Called by parent (WheelPanel).
     startSpin() {
-      const canvas = this.$refs.canvas;
+      const mainCanvas = this.$refs.mainCanvas;
       const prizes = this.prizes;
       const self = this;
-      let animFrame = null;
 
       const totalTicks = getRandomInt(450, 530);
       const speed = 0.12 + getRandomInt(0, 80) * 0.001;
       let ticks = 0;
       const start = +new Date();
 
-      function frame() {
+      function mainLoop() {
         const now = +new Date();
         const targetTicks = Math.min(totalTicks, (now - start) / 10);
         for (; ticks <= targetTicks; ++ticks) {
           self.angle += (speed * (totalTicks - ticks)) / totalTicks;
         }
-        if (ticks < totalTicks) setTimeout(frame, 10);
-        else self.spinCompleted();
 
-        window.cancelAnimationFrame(animFrame);
-        animFrame = window.requestAnimationFrame(() => {
-          redraw(canvas, self.angle, prizes);
-        });
+        redrawWheel(mainCanvas, self.angle, prizes);
+
+        if (ticks < totalTicks) {
+          window.requestAnimationFrame(mainLoop);
+        } else {
+          self.spinCompleted();
+        }
       }
 
-      setTimeout(frame, 10);
+      window.requestAnimationFrame(mainLoop);
     }
   },
   mounted() {
-    this.offscreen = document.createElement('canvas');
     this.resizeIntervalId = setInterval(this.resize, 10);
   },
   beforeDestroy() {
@@ -208,7 +226,7 @@ export default {
 </script>
 
 <style>
-.wheel-area {
+.wheels-container {
   position: relative;
   flex: 1 1 auto;
   height: 100%;
@@ -216,7 +234,7 @@ export default {
   max-width: 100%;
   overflow: hidden;
 }
-.wheel {
+.wheels {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -224,5 +242,25 @@ export default {
   max-height: 100%;
   max-width: 100%;
   overflow: hidden;
+}
+.wheel-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.wheel-main,
+.wheel-sub {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+.wheel-sub {
+  z-index: 2;
 }
 </style>
