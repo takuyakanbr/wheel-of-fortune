@@ -24,10 +24,13 @@ export const getDefaultBgColor = index => COLORS[index % NUM_COLORS];
 
 export const getInitialPreset = (param, presets) => {
   const index = parseInt(param);
+
+  // Use a default (built-in) preset.
   if (index > 0 && index <= DEFAULT_PRESETS.length) {
     return DEFAULT_PRESETS[index - 1];
   }
 
+  // Use a user preset.
   const preset = presets[index - 1 - DEFAULT_PRESETS.length];
   return preset ? preset.data : null;
 };
