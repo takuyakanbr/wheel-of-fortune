@@ -1,26 +1,26 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import * as getters from './getters'
-import * as actions from './actions'
-import * as mutations from './mutations'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import * as getters from './getters';
+import * as actions from './actions';
+import * as mutations from './mutations';
 
-import { getAvailable, getInitialPreset } from '../data'
-import { PRESET1 } from '../data/presets'
-import { loadOptions, loadPresets } from '../data/storage'
-import { deepClone, getParameterByName } from '../util'
+import { getAvailable, getInitialPreset } from '../data';
+import { PRESET1 } from '../data/presets';
+import { loadOptions, loadPresets } from '../data/storage';
+import { deepClone, getParameterByName } from '../util';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-let options = loadOptions()
-const presets = loadPresets()
+let options = loadOptions();
+const presets = loadPresets();
 
 // Use the preset specified by the parameter, if any.
-const initial = getInitialPreset(getParameterByName('preset'), presets)
-const data = initial ? deepClone(initial) : deepClone(PRESET1)
+const initial = getInitialPreset(getParameterByName('preset'), presets);
+const data = initial ? deepClone(initial) : deepClone(PRESET1);
 
 // If there is no stored options, use the initial data as options.
 if (!options) {
-  options = deepClone(data)
+  options = deepClone(data);
 }
 
 const state = {
@@ -34,27 +34,23 @@ const state = {
   available: deepClone(getAvailable(data.prizes)),
   records: [],
   presets
-}
+};
 
 const store = new Vuex.Store({
   state,
   getters,
   actions,
   mutations
-})
+});
 
 if (module.hot) {
-  module.hot.accept([
-    './getters',
-    './actions',
-    './mutations'
-  ], () => {
+  module.hot.accept(['./getters', './actions', './mutations'], () => {
     store.hotUpdate({
       getters: require('./getters'),
       actions: require('./actions'),
       mutations: require('./mutations')
-    })
-  })
+    });
+  });
 }
 
-export default store
+export default store;

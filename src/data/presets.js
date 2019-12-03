@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // The wheel used in the game show 'Wheel of Fortune'.
 export const PRESET1 = {
@@ -34,7 +34,7 @@ export const PRESET1 = {
     { name: '$10000', freq: 1, bg: '#FFD54F', text: '#222', hide: false, fontMod: 2 },
     { name: 'BANKRUPT', freq: 1, bg: '#333', text: '#eee', hide: false, fontMod: 2 }
   ]
-}
+};
 
 // Wheel of Misfortune: SMRT disruption edition.
 export const PRESET2 = {
@@ -59,7 +59,7 @@ export const PRESET2 = {
     { name: 'Collision', freq: 2, bg: '#ef9a9a', text: '#222', hide: false, fontMod: 1 },
     { name: 'No Delay', freq: 1, bg: '#111', text: 'white', hide: false, fontMod: 1.4 }
   ]
-}
+};
 
 // Wheel of Inquiry: select a person to answer your question.
 export const PRESET3 = {
@@ -67,7 +67,8 @@ export const PRESET3 = {
   winningText: 'Your turn to answer the question, <b>%s</b>!',
   background: '',
   removeWinning: true,
-  prizes: [ // use defaults - freq: 4, bg: auto, text: #222, hide: false, fontMod: 1
+  prizes: [
+    // use defaults - freq: 4, bg: auto, text: #222, hide: false, fontMod: 1
     { name: 'James' },
     { name: 'John' },
     { name: 'Robert' },
@@ -85,6 +86,6 @@ export const PRESET3 = {
     { name: 'Maria' },
     { name: 'Susan' }
   ]
-}
+};
 
-export const DEFAULT_PRESETS = [PRESET1, PRESET2, PRESET3]
+export const DEFAULT_PRESETS = [PRESET1, PRESET2, PRESET3];

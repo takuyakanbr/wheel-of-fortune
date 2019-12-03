@@ -6,7 +6,9 @@
     </tr>
     <tr>
       <td><label for="tb-prize-freq">Relative Chance</label></td>
-      <td class="prize-input-cell"><input type="number" id="tb-prize-freq" v-model.number="prize.freq" placeholder="4" /></td>
+      <td class="prize-input-cell">
+        <input type="number" id="tb-prize-freq" v-model.number="prize.freq" placeholder="4" />
+      </td>
     </tr>
     <tr>
       <td><label for="tb-prize-bg">Background Color</label></td>
@@ -18,29 +20,31 @@
     </tr>
     <tr>
       <td><label for="tb-prize-font">Font Scaling</label></td>
-      <td class="prize-input-cell"><input type="number"  step="0.01" id="tb-prize-font" v-model.number="prize.fontMod" placeholder="1.0" /></td>
+      <td class="prize-input-cell">
+        <input type="number" step="0.01" id="tb-prize-font" v-model.number="prize.fontMod" placeholder="1.0" />
+      </td>
     </tr>
   </table>
 </template>
 
 <script>
-  export default {
-    name: 'PrizeEditor',
-    props: {
-      index: {
-        type: Number,
-        required: true
-      },
-      prize: {
-        type: Object,
-        required: true
-      }
+export default {
+  name: 'PrizeEditor',
+  props: {
+    index: {
+      type: Number,
+      required: true
+    },
+    prize: {
+      type: Object,
+      required: true
     }
   }
+};
 </script>
 
 <style>
-  .prize-input-cell > input {
-    width: 160px;
-  }
+.prize-input-cell > input {
+  width: 160px;
+}
 </style>

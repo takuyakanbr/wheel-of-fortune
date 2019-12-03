@@ -1,11 +1,16 @@
 .DS_Store
-node_modules/
-/dist/
+node_modules
+/dist
+z.*
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/test/unit/coverage/
-z.*
 
 # Editor directories and files
 .idea
@@ -15,3 +20,4 @@ z.*
 *.ntvs*
 *.njsproj
 *.sln
+*.sw?
